@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp-canary
+  labels:
+    app: myapp
+    type: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  strategy: {}
+  template:
+    metadata:
+      name: myapp-pod
+      labels:
+        version: v3
+        app: frontend
+    spec:
+      imagePullSecrets:
+      - name: dockerhubcred
+      containers:
+      - image: asrafbd/mynginx:v3
+        name: mynginx
+        ports:
+        - containerPort: 80
